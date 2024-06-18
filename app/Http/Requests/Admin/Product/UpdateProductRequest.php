@@ -25,7 +25,7 @@ class UpdateProductRequest extends FormRequest
             'category_id' => [
                 Rule::exists('categories', 'id'),
             ],
-            'image' => ['image', 'max:2048'],
+            'image' => ['image','mimes:jpeg,png,jpg', 'max:2048'],
         ];
     }
 }

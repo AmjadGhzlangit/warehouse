@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PharmacyController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Customer\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +17,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/dashboard', function () {
     return view('admin.pages.index');
 });
+Route::get('/', [CustomerController::class,'index'])->name('home');
+Route::get('/view-products', [CustomerController::class,'indexProducts'])->name('view-products');
+Route::get('/show-product/{product}', [CustomerController::class,'showProduct'])->name('show-products');
+Route::get('/cart/add/{id}', [CustomerController::class, 'addToCart'])->name('add-to-cart');
+
+Route::get('/cart', [CustomerController::class, 'viewCart'])->name('view-cart');
+Route::post('/cart/update', [CustomerController::class, 'updateCart'])->name('update-cart');
+Route::get('/cart/remove/{id}', [CustomerController::class, 'removeFromCart'])->name('remove-from-cart');
+Route::get('/checkout', [CustomerController::class, 'proceedToCheckout'])->name('checkout');
+
+Route::get('/order/create', [CustomerController::class, 'createOrder'])->name('create-order');
+
+Route::get('/order/{id}', [CustomerController::class, 'viewOrder'])->name('view-order');
+Route::get('/orders', [CustomerController::class, 'listOrders'])->name('list-orders');
+
+
+//Route::middleware(['auth'])->group(function () {
+//    Route::get('/cart', [CustomerController::class, 'viewCart'])->name('view-cart');
+//    Route::post('/cart/update', [CustomerController::class, 'updateCart'])->name('update-cart');
+//    Route::get('/cart/remove/{id}', [CustomerController::class, 'removeFromCart'])->name('remove-cart');
+//});
+
 
 Route::prefix('admin')->group(function () {
     Route::resource('categories', CategoryController::class)->names('admin.categories');

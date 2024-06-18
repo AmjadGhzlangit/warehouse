@@ -20,6 +20,7 @@ class ProductFactory extends Factory
         return [
             'scientific_name' => $this->faker->word,
             'trading_name' => $this->faker->word,
+            'description' => $this->faker->paragraph,
             'date_of_validity' => $this->faker->date,
             'manufacturer' => $this->faker->company,
             'price' => $this->faker->randomFloat(2, 1, 1000),
