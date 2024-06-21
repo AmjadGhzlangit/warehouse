@@ -31,13 +31,12 @@
                                     <div class="input-group-prepend">
                                         <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                                     </div>
-                                    <input type="text" name="quantities[{{ $id }}]" class="form-control text-center" value="{{ $item['quantity'] }}" placeholder=""
+                                    <input type="text" name="quantities[{{ $id }}]" class="form-control text-center quantity-input" value="{{ $item['quantity'] }}" placeholder=""
                                            aria-label="Example text with button addon" aria-describedby="button-addon1">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                                     </div>
                                 </div>
-
                             </td>
                             <td>${{ number_format($item['price'] * $item['quantity'], 2) }}</td>
                             <td><a href="{{ route('remove-from-cart', $id) }}" class="btn btn-primary height-auto btn-sm">X</a></td>
@@ -106,4 +105,31 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.js-btn-plus').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    let input = this.closest('.input-group').querySelector('.quantity-input');
+                    input.value = parseInt(input.value) + 1;
+                });
+            });
+
+            document.querySelectorAll('.js-btn-minus').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    let input = this.closest('.input-group').querySelector('.quantity-input');
+                    if (input.value > 1) {
+                        input.value = parseInt(input.value) - 1;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.quantity-input').forEach(function (input) {
+                input.addEventListener('input', function () {
+                    if (input.value < 1) {
+                        input.value = 1;
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

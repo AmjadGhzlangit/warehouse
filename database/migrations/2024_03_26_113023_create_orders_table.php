@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->nullable();
             $table->integer('total');
-            $table->string('order_status')->default(OrderStatusType::PREPARATION->value);
+            $table->string('order_status')->default(OrderStatusType::PADDING->value);
             $table->date('date');
             $table->timestamps();
         });

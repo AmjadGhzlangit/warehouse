@@ -21,6 +21,7 @@
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Email</th>
+                        <th>Active</th>
                         <th>License Image</th>
                         <th>Action</th>
                     </tr>
@@ -28,11 +29,12 @@
                     <tbody>
                     @foreach($pharmacies as $pharmacy)
                         <tr>
-                            <td>{{ $pharmacy->user->name }}</td>
+                            <td>{{ $pharmacy->user->name ?? '' }}</td>
                             <td>{{ $pharmacy->name }}</td>
                             <td>{{ $pharmacy->address }}</td>
                             <td>{{ $pharmacy->phone }}</td>
                             <td>{{ $pharmacy->email }}</td>
+                            <td>{{ $pharmacy->is_active ? 'Active' : 'Inactive' }}</td>
                             <td>
                                 @if($pharmacy->license_image)
                                     <img src="{{ asset('storage/' . $pharmacy->license_image) }}" alt="License Image" style="max-width: 100px; max-height: 100px;">
@@ -53,6 +55,7 @@
                     @endforeach
                     </tbody>
                 </table>
+                <div>{{$pharmacies->links()}}</div>
             </div>
         </div>
     </div>

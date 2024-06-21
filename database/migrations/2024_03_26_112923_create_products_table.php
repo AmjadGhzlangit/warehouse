@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignIdFor(Category::class);
             $table->string('scientific_name');
             $table->string('trading_name');
-            $table->string('description');
+            $table->text('description');
             $table->date('date_of_validity');
             $table->string('manufacturer');
             $table->unsignedInteger('price');

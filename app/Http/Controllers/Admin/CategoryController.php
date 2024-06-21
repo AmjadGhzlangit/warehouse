@@ -12,7 +12,7 @@ class CategoryController extends Controller
     // منجيب كل شي بيانات من الداتا بيز
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::paginate(15);
 
         return view('admin.categories.index', compact('categories'));
     }

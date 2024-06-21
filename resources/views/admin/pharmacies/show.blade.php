@@ -10,6 +10,7 @@
                     <p><strong>Address:</strong> {{ $pharmacy->address }}</p>
                     <p><strong>Phone:</strong> {{ $pharmacy->phone }}</p>
                     <p><strong>Email:</strong> {{ $pharmacy->email }}</p>
+                    <p><strong>Is Active:</strong> {{ $pharmacy->is_active ? 'Active' : 'Inactive' }}</p>
                 </div>
                 <div class="col-md-6">
                     <p><strong>User:</strong> {{ $pharmacy->user->name }}</p> <!-- Display user's name -->
@@ -22,6 +23,7 @@
                 </div>
             </div>
             <a href="{{ route('admin.pharmacies.edit', $pharmacy->id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ route('admin.pharmacies.active', $pharmacy->id) }}" class="btn btn-primary">Active</a>
             <a href="{{ route('admin.pharmacies.index') }}" class="btn btn-secondary">Back</a>
         </div>
     </div>

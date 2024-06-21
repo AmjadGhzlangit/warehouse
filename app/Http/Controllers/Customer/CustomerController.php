@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -22,6 +23,11 @@ class CustomerController extends Controller
     {
         // Query builder for products
         $productsQuery = Product::query();
+
+        // Apply category filter if provided
+        if ($request->has('category')) {
+            $productsQuery->where('category_id', $request->input('category'));
+        }
 
         // Apply price range filter if provided
         if ($request->has('price_range')) {
@@ -45,7 +51,6 @@ class CustomerController extends Controller
                     $productsQuery->orderBy('sell_price', 'desc');
                     break;
                 default:
-
                     break;
             }
         }
@@ -53,8 +58,11 @@ class CustomerController extends Controller
         // Fetch products with pagination
         $products = $productsQuery->paginate(10);
 
-        // Return the view with the filtered products
-        return view('customer.pages.shop', compact('products'));
+        // Get all categories for the filter dropdown
+        $categories = Category::all();
+
+        // Return the view with the filtered products and categories
+        return view('customer.pages.shop', compact('products', 'categories'));
     }
 
     public function showProduct(Product $product)
@@ -107,8 +115,8 @@ class CustomerController extends Controller
         if ($order->user_id !== Auth::id()) {
             return redirect()->back()->with('error', 'You are not authorized to view this order.');
         }
-
-        return view('customer.pages.view_order', compact('order'));
+        $user = $order->user;
+        return view('customer.pages.view_order', compact('order','user'));
     }
 
     public function listOrders()
@@ -154,22 +162,23 @@ class CustomerController extends Controller
         return redirect()->route('view-cart')->with('success', 'Item removed from cart.');
     }
 
-    public function addToCart(Request $request)
+    public function addToCart(Request $request, $id)
     {
-        $id = $request->id;
         $product = Product::find($id);
 
         if (!$product) {
             return response()->json(['message' => 'Product not found!'], 404);
         }
 
+        $quantity = $request->input('quantity', 1); // Default to 1 if no quantity is provided
+
         $cart = Session::get('cart', []);
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+            $cart[$id]['quantity'] += $quantity;
         } else {
             $cart[$id] = [
                 "name" => $product->trading_name,
-                "quantity" => 1,
+                "quantity" => $quantity,
                 "price" => $product->sell_price,
                 "image" => $product->image
             ];
@@ -178,7 +187,6 @@ class CustomerController extends Controller
         Session::put('cart', $cart);
 
         return redirect()->back()->with('success', 'Product added to cart successfully!');
-
     }
 
     public function proceedToCheckout()
@@ -196,5 +204,19 @@ class CustomerController extends Controller
 
         // Render the checkout view with cart details
         return view('customer.pages.checkout', compact('cart', 'subtotal', 'total'));
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Search products by name, description or any other relevant field
+        $products = Product::where('trading_name', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->paginate(10);
+        $categories = Category::all();
+
+        // Return the view with the filtered products and categories
+        return view('customer.pages.shop', compact('products', 'categories'));
     }
 }

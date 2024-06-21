@@ -10,8 +10,13 @@ class Pharmacy extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','name', 'address', 'phone','email','license_image'];
+    protected $fillable = [
+        'username', 'email', 'address', 'phone', 'password', 'is_active',
+    ];
 
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

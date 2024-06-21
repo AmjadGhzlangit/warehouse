@@ -4,7 +4,7 @@
     <div class="container">
         <h2>Order Details</h2>
 
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">Order #{{ $order->id }}</h5>
                 <p class="card-text"><strong>Date:</strong> {{ $order->date }}</p>
@@ -13,7 +13,17 @@
             </div>
         </div>
 
-        <h3 class="mt-4">Items</h3>
+        <h3>User Details</h3>
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text"><strong>Name:</strong> {{ $user->name }}</p>
+                <p class="card-text"><strong>Email:</strong> {{ $user->email }}</p>
+                <p class="card-text"><strong>Address:</strong> {{ $user->address }}</p>
+                <p class="card-text"><strong>Phone:</strong> {{ $user->phone }}</p>
+            </div>
+        </div>
+
+        <h3>Items</h3>
         <table class="table">
             <thead>
             <tr>

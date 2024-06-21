@@ -18,11 +18,18 @@
                                 <option value="price_desc">Price, high to low</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <select class="form-control" name="category">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary mt-3">Apply</button>
                     </form>
                 </div>
             </div>
-
 
             <div class="row mt-4">
                 @forelse($products as $product)
